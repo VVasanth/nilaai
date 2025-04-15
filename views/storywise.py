@@ -12,13 +12,85 @@ HUGGINGFACEHUB_API_TOKEN = "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"
 hf_endpoint_url = "https://dl5gegyfgn6puaab.us-east-1.aws.endpoints.huggingface.cloud"
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
 
-template = """
-<s>[INST] <<SYS>> You are a helpful QA architect, who has an expertise in writing test cases for api. From the given api documentation, you generate comprehensive test cases. You also have expertise in python and java languages and write quality code. <</SYS>> [INST]
+# Define prompt
+template = """### Instruction:
+{instruction}
 
-{question} [/INST]
+### User Story Title:
+{input_1}
+
+### User Story Description:
+{input_2}
+
+### Acceptance Criteria:
+{input_3}
+
+
+### Response:"""
+
+instruction = """"
+Can you help me in evaluating the user story on the below defined objective with regard to its quality?
+
+Objective: Evaluate a user story against best practices to determine its clarity, feasibility, and alignment with business goals.
+
+Evaluation Criteria:
+
+INVEST Principles:
+
+✅ Independent: Can the story be developed without heavy dependencies?
+
+✅ Negotiable: Is there room for discussion and refinement?
+
+✅ Valuable: Does it deliver clear value to the user or business?
+
+✅ Estimable: Can developers estimate the effort required?
+
+✅ Small: Can it fit within a single sprint or iteration?
+
+✅ Testable: Are there clear success criteria?
+
+User-Centric Format:
+
+🎯 Does the story clearly identify the user, action, and benefit?
+
+🎯 Is it free from unnecessary technical jargon?
+
+Acceptance Criteria:
+
+📌 Are the conditions clear, specific, and measurable?
+
+📌 Do they cover both normal and edge cases?
+
+Business Alignment:
+
+📊 Does the story align with product or business goals?
+
+📊 Does it contribute to engagement, efficiency, or revenue?
+
+Collaboration & Refinement:
+
+🔄 Does the story invite discussion among stakeholders?
+
+🔄 Can it be refined based on feedback?
+
+Output Format (AI Response Example):
+
+Evaluation Summary:
+
+Strengths: (Highlight what is well-defined.)
+
+Areas for Improvement: (Identify gaps and suggest refinements.)
+
+Overall Assessment: (Rate the story as Strong, Needs Refinement, or Weak based on criteria.)
+
+If the user story input does not meet the defined template, pls respond back asking user to provide user story in the proper template.
+
+User Story to be evaluated:
+
 """
 
-def generate_response(input_text):
+
+def generate_response(input_1, input_2, input_3):
     """
     Returns a language model for HuggingFace inference.
 
@@ -43,14 +115,20 @@ def generate_response(input_text):
     
     # Create a simple prompt template
     prompt_template = PromptTemplate(
-        input_variables=["user_input"],
-        template="Q: {user_input}\nA:"
+         input_variables=["instruction", "input_1", "input_2", "input_3"],
+         template=template,
     )
 
     # Create a chain
     chain = LLMChain(llm=llm_hf, prompt=prompt_template)
 
-    response = chain.run(user_input=input_text)
+    response = chain.run(
+        {
+            "instruction": instruction,
+            "input_1": input_1,
+            "input_2": input_2,
+            "input_3": input_3
+        })
     
     return response
 
@@ -94,6 +172,6 @@ with st.form("my_form"):
     #st.button("Evaluate User Story", type="primary")
     if submitted:
         print(user_story_desc)
-        response = generate_response(user_story_desc)
+        response = generate_response(user_story_title, user_story_desc, acceptance_criteria)
         st.success("Here's the answer:")
         st.write(response)
