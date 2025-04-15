@@ -172,6 +172,7 @@ with st.form("my_form"):
     #st.button("Evaluate User Story", type="primary")
     if submitted:
         print(user_story_desc)
-        response = generate_response(user_story_title, user_story_desc, acceptance_criteria)
+        with st.spinner("Evaluating..."):
+            response = generate_response(user_story_title, user_story_desc, acceptance_criteria)
         st.success("Here's the answer:")
         st.write(response)
