@@ -169,26 +169,29 @@ st.subheader("🧠 Experiment Zone: Validate Your User Stories with AI")  # This
 
 with st.form("my_form"):
 
-    user_story_title = st.text_input("User Story Title", "")
+    user_story_title = st.text_input("User Story Title *", placeholder="Enter your user story title here...")
 
     st.write("\n")
     user_story_desc = st.text_area(
-        "User Story Description",
-        "",height=150
+        "User Story Description *",
+        placeholder="Enter your user story description here...",height=150
     )
 
     st.write("\n")
     acceptance_criteria = st.text_area(
-        "Acceptance Criteria",
-        "",height=100
+        "Acceptance Criteria *",
+        placeholder="Enter your acceptance criteria here...",height=100
     )
 
     st.write("\n")
     submitted = st.form_submit_button("Evaluate User Story")
     #st.button("Evaluate User Story", type="primary")
     if submitted:
-        print(user_story_desc)
-        with st.spinner("Evaluating..."):
-            response = generate_response(user_story_title, user_story_desc, acceptance_criteria)
-        st.success("Here's the answer:")
-        st.write(response)
+        if not user_story_title or not user_story_desc or not acceptance_criteria:
+            st.error("Title, Description and Acceptance Criteria are required. Please fill in all fields.")
+        else:
+            print(user_story_desc)
+            with st.spinner("Evaluating..."):
+                response = generate_response(user_story_title, user_story_desc, acceptance_criteria)
+            st.success("Here's the answer:")
+            st.write(response)
