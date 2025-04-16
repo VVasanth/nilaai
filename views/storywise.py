@@ -134,22 +134,38 @@ def generate_response(input_1, input_2, input_3):
 
 st.title(f"StoryWise - User Story Assessor", anchor=False)
 
-
-st.write("\n")
 st.subheader("Your GenAI partner for bulletproof user stories", anchor=False)
 st.write(
-    """
-    StoryWise is a GenAI-powered assistant that reviews user stories in real time, providing instant, actionable feedback to improve clarity, completeness, and testability. It identifies ambiguous language, missing acceptance criteria, and vague requirements — helping teams write better stories, faster. 
-    
-    The result? 
-    
-    Stronger specs, fewer bugs, and a smoother handoff from idea to execution.
+"""
+***StoryWise is your GenAI-powered story coach — instantly slicing through fuzz, tightening clarity, and flagging gaps before weak specs become real problems.*** It catches vagueness, missing criteria, and half-baked requirements before they hit your backlog.
+
+💡 How it aligns with the INVEST principles:
+
+✅ ***Independent*** – Encourages writing stories that stand alone by spotting dependencies or entanglements.
+
+✅ ***Negotiable*** – Flags overly prescriptive language to keep the story open for team discussion.
+
+✅ ***Valuable*** – Ensures each story has clear business value, not just busywork.
+
+✅ ***Estimable*** – Highlights missing detail or ambiguity that blocks accurate estimation.
+
+✅ ***Small*** – Detects bloated stories and suggests splitting logic to keep them manageable.
+
+✅ ***Testable*** – Validates the presence of concrete acceptance criteria so QA can hit the ground running.
+
+The result? \n
+📉 **Fewer bugs.** \n
+🚀 **Faster cycles.** \n
+🤝 **Cleaner handoffs from product to engineering.** \n
+
+\n
+StoryWise: From fuzzy ideas to rock-solid user stories — in real time.
     """
 )
 
-st.write("\n")
 st.divider()
-st.write("\n")
+
+st.subheader("🧠 Experiment Zone: Validate Your User Stories with AI")  # This acts as the form title
 
 with st.form("my_form"):
 

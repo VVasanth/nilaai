@@ -4,18 +4,18 @@ import streamlit as st
 # --- PAGE SETUP ---
 about_page = st.Page(
     "views/QEforAI_Landing.py",
-    title="QE for AI",
+    title="NILA - QE for AI",
     icon=":material/account_circle:",
     default=True,
 )
 project_1_page = st.Page(
     "views/storywise.py",
-    title="StoryWise",
+    title="StoryWise - User Story Assessor",
     icon=":material/bar_chart:",
 )
 project_2_page = st.Page(
     "views/chatbot.py",
-    title="Chat Bot",
+    title="QE Chat Bot",
     icon=":material/smart_toy:",
 )
 
