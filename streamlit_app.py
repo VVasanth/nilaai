@@ -13,7 +13,20 @@ project_1_page = st.Page(
     title="StoryWise - User Story Assessor",
     icon=":material/bar_chart:",
 )
+
 project_2_page = st.Page(
+    "views/storycraft.py",
+    title="StoryCraft - User Story Refiner",
+    icon=":material/fax:",
+)
+
+project_3_page = st.Page(
+    "views/testweaver.py",
+    title="TestWeaver - Generate test cases and scripts from specs",
+    icon=":material/book:",
+)
+
+project_n_page = st.Page(
     "views/chatbot.py",
     title="QE Chat Bot",
     icon=":material/smart_toy:",
@@ -27,7 +40,7 @@ project_2_page = st.Page(
 pg = st.navigation(
     {
         "Info": [about_page],
-        "Projects": [project_1_page, project_2_page],
+        "Projects": [project_1_page, project_2_page, project_3_page],
     }
 )
 
