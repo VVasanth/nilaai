@@ -4,7 +4,7 @@ import streamlit as st
 # --- PAGE SETUP ---
 about_page = st.Page(
     "views/QEforAI_Landing.py",
-    title="NILA - QE for AI",
+    title="NILA - AI for QE",
     icon=":material/account_circle:",
     default=True,
 )

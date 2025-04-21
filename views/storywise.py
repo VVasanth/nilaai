@@ -83,6 +83,8 @@ Areas for Improvement: (Identify gaps and suggest refinements.)
 
 Overall Assessment: (Rate the story as Strong, Needs Refinement, or Weak based on criteria.)
 
+Provide each of the strengths and Areas for improvements as a bulletted points, with clear specific details.
+
 If the user story input does not meet the defined template, pls respond back asking user to provide user story in the proper template.
 
 User Story to be evaluated:
