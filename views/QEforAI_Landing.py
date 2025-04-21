@@ -9,7 +9,7 @@ with col1:
     st.image("./assets/NilaAI.jpeg", width=350)
 
 with col2:
-    st.title("NILA - QE for AI", anchor=False)
+    st.title("NILA - AI for QE", anchor=False)
     st.write(
         "Narwal's Intelligent LifeCycle Assurance"
     )
