@@ -1,5 +1,12 @@
 import streamlit as st
 
+# Dummy user database (replace with real DB or auth service in production)
+USER_DB = {
+    "admin": "admin123",
+    "user1": "password1",
+    "user2": "password2"
+}
+
 
 # --- PAGE SETUP ---
 about_page = st.Page(
@@ -32,23 +39,22 @@ project_n_page = st.Page(
     icon=":material/smart_toy:",
 )
 
-
 # --- NAVIGATION SETUP [WITHOUT SECTIONS] ---
 # pg = st.navigation(pages=[about_page, project_1_page, project_2_page])
-
-# --- NAVIGATION SETUP [WITH SECTIONS]---
-pg = st.navigation(
-    {
-        "Info": [about_page],
-        "Projects": [project_1_page, project_2_page, project_3_page],
-    }
-)
-
-
-# --- SHARED ON ALL PAGES ---
-st.logo("assets/narwal.png")
-st.sidebar.markdown("Made to demonstrate AI for QE Capabilities")
+def main_app():
+    # --- NAVIGATION SETUP [WITH SECTIONS]---
+    pg = st.navigation(
+        {
+            "Info": [about_page],
+            "Projects": [project_1_page, project_2_page, project_3_page],
+        }
+    )
 
 
-# --- RUN NAVIGATION ---
-pg.run()
+    # --- SHARED ON ALL PAGES ---
+    st.logo("assets/narwal.png")
+    #st.sidebar.markdown("Made to demonstrate AI for QE Capabilities")
+
+
+    # --- RUN NAVIGATION ---
+    pg.run()
