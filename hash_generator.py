@@ -1,3 +1,3 @@
 import streamlit_authenticator as stauth
-hashed_pw = stauth.Hasher(['1234']).generate()
-print(hashed_pw[0])
+hashed_pw = stauth.Hasher().hash('nila@2025')
+print(hashed_pw)

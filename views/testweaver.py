@@ -9,88 +9,82 @@ import os
 
 load_dotenv()
 HUGGINGFACEHUB_API_TOKEN = "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"
-hf_endpoint_url = "https://dl5gegyfgn6puaab.us-east-1.aws.endpoints.huggingface.cloud"
+#hf_endpoint_url = "https://dl5gegyfgn6puaab.us-east-1.aws.endpoints.huggingface.cloud"
+hf_endpoint_url = "https://ydx9vu47ixt3vcs8.us-east-1.aws.endpoints.huggingface.cloud"
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
 
 # Define prompt
 template = """### Instruction:
 {instruction}
 
-### User Story Title:
+### API Name:
 {input_1}
 
-### User Story Description:
+### API Brief Description:
 {input_2}
 
-### Acceptance Criteria:
+### Endpoint URL:
 {input_3}
+
+### Parameter_details:
+{input_4}
 
 
 ### Response:"""
 
 instruction = """"
-Can you help me in evaluating the user story on the below defined objective with regard to its quality?
+As a Quality Engineer, generate a detailed and structured set of test cases — including positive, negative, and edge cases — for validating a REST API endpoint. The goal is to ensure correctness, robustness, error handling, and resilience against edge conditions.
 
-Objective: Evaluate a user story against best practices to determine its clarity, feasibility, and alignment with business goals.
+Actor: Quality Engineer (QE)
+Responsible for:
+* Validating all input parameters (required/optional)
+* Simulating real-world usage and failure scenarios
+* Ensuring the endpoint handles invalid or unexpected input gracefully
+* Confirming compliance with spec, business rules, and security expectations
 
-Evaluation Criteria:
+Expected Output (from Assistant):
+🔢 Test Case Summary:
+* Total Positive Cases: X
+* Total Negative Cases: Y
+* Total Edge Cases: Z
+✅ Positive Test Cases
+(Valid scenarios that should succeed)
+❌ Negative Test Cases
+(Invalid or missing inputs that should fail predictably)
+🧪 Edge Test Cases
+(Boundary or rare conditions to test robustness)
 
-INVEST Principles:
+📋 Test Case Format (for each case):
+* Test Case ID
+* Description
+* Input Parameters (with example values)
+* Expected Outcome
 
-✅ Independent: Can the story be developed without heavy dependencies?
+🔍 QE Test Strategy Coverage Checklist:
+* Required vs optional parameter handling
+* Data type mismatches and nulls
+* Missing parameters
+* Invalid or unsupported enum values
+* Format violations (e.g., malformed URL)
+* Boundary values and limits
+* Extra/unknown fields
+* Wrong HTTP methods
+* Authentication/authorization errors (if applicable)
+* Duplicate/replay handling
+* Business logic constraints
 
-✅ Negotiable: Is there room for discussion and refinement?
-
-✅ Valuable: Does it deliver clear value to the user or business?
-
-✅ Estimable: Can developers estimate the effort required?
-
-✅ Small: Can it fit within a single sprint or iteration?
-
-✅ Testable: Are there clear success criteria?
-
-User-Centric Format:
-
-🎯 Does the story clearly identify the user, action, and benefit?
-
-🎯 Is it free from unnecessary technical jargon?
-
-Acceptance Criteria:
-
-📌 Are the conditions clear, specific, and measurable?
-
-📌 Do they cover both normal and edge cases?
-
-Business Alignment:
-
-📊 Does the story align with product or business goals?
-
-📊 Does it contribute to engagement, efficiency, or revenue?
-
-Collaboration & Refinement:
-
-🔄 Does the story invite discussion among stakeholders?
-
-🔄 Can it be refined based on feedback?
-
-Output Format (AI Response Example):
-
-Evaluation Summary:
-
-Strengths: (Highlight what is well-defined.)
-
-Areas for Improvement: (Identify gaps and suggest refinements.)
-
-Overall Assessment: (Rate the story as Strong, Needs Refinement, or Weak based on criteria.)
-
-If the user story input does not meet the defined template, pls respond back asking user to provide user story in the proper template.
-
-User Story to be evaluated:
+📝 API Detail input to generate test cases:
 
 """
 
+def process_response(response_str):
+    start_index = response_str.find("🔢 Test Case Summary:")
+    processed_response = response_str[start_index:]
+    return processed_response
 
-def generate_response(input_1, input_2, input_3):
+
+
+def generate_response(input_1, input_2, input_3, input_4):
     """
     Returns a language model for HuggingFace inference.
 
@@ -105,20 +99,16 @@ def generate_response(input_1, input_2, input_3):
     # Wrap it with LangChain
     llm_hf = HuggingFaceEndpoint(
         endpoint_url=hf_endpoint_url,
-        max_new_tokens=1024,
-        top_k=50,
-        top_p=0.9,
-        temperature=0.6,
-        repetition_penalty=1.2,
+        max_new_tokens=3000,
         streaming=True
     )
     
     # Create a simple prompt template
     prompt_template = PromptTemplate(
-         input_variables=["instruction", "input_1", "input_2", "input_3"],
+         input_variables=["instruction", "input_1", "input_2", "input_3", "input_4"],
          template=template,
     )
-
+    print(prompt_template)
     # Create a chain
     chain = LLMChain(llm=llm_hf, prompt=prompt_template)
 
@@ -127,7 +117,8 @@ def generate_response(input_1, input_2, input_3):
             "instruction": instruction,
             "input_1": input_1,
             "input_2": input_2,
-            "input_3": input_3
+            "input_3": input_3,
+            "input_4": input_4
         })
     
     return response
@@ -164,4 +155,39 @@ st.write(
 
 st.divider()
 
-st.subheader("🛠️ TestWeaver – Get ready to transform your API specs into fully tested Python scripts. Coming soon!")  # This acts as the form title
+st.subheader("🧠 Experiment Zone: AI Generated Test Cases from API details")  # This acts as the form title
+
+with st.form("my_form"):
+
+    api_name = st.text_input("API Name *", placeholder="Enter api name/title here...")
+
+    st.write("\n")
+    api_desc = st.text_area(
+        "API Brief Description *",
+        placeholder="Enter brief description about the API here...",height=100
+    )
+
+    st.write("\n")
+    endpoint_url = st.text_input("Endpoint URL *", placeholder="Enter endpoint url here...")
+
+    st.write("\n")
+    parameter_details = st.text_area(
+        "Parameter Details *",
+        placeholder="Enter api parameter details here...",height=300
+    )
+
+    st.write("\n")
+    submitted = st.form_submit_button("Generate Test Cases")
+    #st.button("Evaluate User Story", type="primary")
+    if submitted:
+        if not api_name or not api_desc or not endpoint_url or not parameter_details:
+            st.error("API Title, Description, Endpoint URL and Parameter details are required. Please fill in all fields.")
+        else:
+            with st.spinner("Generating..."):
+                print(api_name)
+                print(parameter_details)
+                response = generate_response(api_name, api_desc, endpoint_url, parameter_details)
+            print(response)
+            st.success("Generated Test Cases are:")
+            processed_response = process_response(response)
+            st.write(processed_response)
