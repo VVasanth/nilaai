@@ -78,8 +78,9 @@ Expected Output (from Assistant):
 """
 
 def process_response(response_str):
-    start_index = response_str.find("🔢 Test Case Summary:")
-    processed_response = response_str[start_index:]
+    start_index = response_str.find("Test Case Summary:")
+    end_index = response_str.find("QE Test Strategy Coverage Checklist:")
+    processed_response = response_str[start_index:end_index]
     return processed_response
 
 
