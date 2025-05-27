@@ -440,11 +440,8 @@ if 'download_test_cases' not in st.session_state:
 if 'generate_test_cases' not in st.session_state:
     st.session_state.generate_test_cases = False
 
-if 'generate_restassured_scripts' not in st.session_state:
-    st.session_state.generate_restassured_scripts = False
-
-if 'view_restassured_scripts' not in st.session_state:
-    st.session_state.view_restassured_scripts = False
+if 'show_generated_test_cases' not in st.session_state:
+    st.session_state.show_generated_test_cases = False
 
 if 'show_generate_script' not in st.session_state:
     st.session_state.show_generate_script = False
@@ -487,7 +484,9 @@ with st.form("my_form"):
 if(st.session_state.generate_test_cases == True):
     st.session_state.download_test_cases = True
     st.session_state.show_generate_script = True
+    st.session_state.show_generated_test_cases = True
     processed_response = process_response(response)
+    st.session_state.generate_test_cases = False
 
 
 @st.dialog("Generate RestAssured Scripts", width="large")
@@ -524,9 +523,8 @@ with bt_cols[0]:
     if(st.session_state.download_test_cases == True):
             # Convert string to bytes
             print("inside if")
-            print("rest assured state value" + str(st.session_state.generate_restassured_scripts))
+            #print("rest assured state value" + str(st.session_state.generate_restassured_scripts))
             text_bytes = processed_response.encode('utf-8')
-
             # Download button
             st.download_button(
                 label="Download as .txt",
@@ -538,32 +536,8 @@ with bt_cols[0]:
 with bt_cols[1]:
     if(st.session_state.show_generate_script == True):
         st.button("Generate Rest Assured Scripts", type="primary", on_click=generate_rest_assured_scripts)
-        #st.session_state.generate_test_cases = False
 
 
-if(st.session_state.generate_restassured_scripts == True):
-    test_summary_content, pos_test_cases, neg_test_cases, edge_test_cases = split_processed_response(processed_response)
-    pos_test_cases_len, neg_test_cases_len, edge_test_cases_len = len(pos_test_cases)-1, len(neg_test_cases)-1, len(edge_test_cases)-1
-    total_test_cases_len = pos_test_cases_len + neg_test_cases_len + edge_test_cases_len
-    print("inside automation script generation")
-    with st.spinner("Generating Automation Scripts..."):
-        for i in range(1, len(pos_test_cases)):
-            print("generating positive scripts" + str(i))
-            rest_assured_script = gen_rest_assured_script(api_name, api_desc, pos_test_cases[i])
-            restassured_automation_scripts.append(rest_assured_script)
-        for i in range(1, len(neg_test_cases)):
-            print("generating negative scripts" + str(i))
-            rest_assured_script = gen_rest_assured_script(api_name, api_desc, neg_test_cases[i])
-            restassured_automation_scripts.append(rest_assured_script)
-        for i in range(1, len(edge_test_cases)):
-            print("generating edge scripts" + str(i))
-            rest_assured_script = gen_rest_assured_script(api_name, api_desc, edge_test_cases[i])
-            restassured_automation_scripts.append(rest_assured_script)
-    st.session_state.view_restassured_scripts = True
-    st.session_state.show_generate_script = False
-
-
-
-if(st.session_state.generate_test_cases == True):
+if(st.session_state.show_generated_test_cases == True):
     st.success("Generated Test Cases are:")        
     st.write(processed_response)
