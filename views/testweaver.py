@@ -57,8 +57,57 @@ As a RestAssured Automation Script engineer, generate a functioning, well format
 
 """
 
+instruction = """
 
-instruction = """"
+As a Quality Engineer (QE), generate a comprehensive and strictly structured set of REST API test cases — covering positive, negative, and edge scenarios — to ensure complete validation of the endpoint’s correctness, robustness, error handling, and resilience under edge conditions.
+
+🎯 Role: Quality Engineer (QE)
+Responsible for:
+
+Exhaustively validating all input parameters (required & optional)
+Simulating realistic and failure-prone usage scenarios
+Ensuring the API gracefully handles invalid, missing, or unexpected input
+Verifying compliance with functional spec, business logic, and security expectations
+
+🔒 ‼️ Output Requirements — Strict Adherence is Mandatory
+You MUST follow the exact structure and format below — no deviations, no omissions. Responses that do not conform will be considered non-compliant.
+
+🔢 Test Case Summary Section (Top of Output):
+Total Positive Cases: X  
+Total Negative Cases: Y  
+Total Edge Cases: Z
+
+✅ Positive Test Cases
+
+❌ Negative Test Cases
+
+🧪 Edge Test Cases
+
+📋 Test Case Format (Each Case Must Include):
+Test Case ID
+Description
+Input Parameters (with sample values)
+
+Expected Outcome
+🔍 QE Test Strategy Coverage Checklist — All Must Be Addressed:
+ Required vs optional parameters
+ Missing or null parameters
+ Incorrect data types
+ Invalid or unsupported enum values
+ Malformed formats (e.g., bad URL, wrong date/time)
+ Boundary limits (min/max, string lengths, etc.)
+ Unexpected/extra fields
+ Invalid HTTP methods
+ Auth/authz failures (if applicable)
+ Replay attacks or duplicate handling
+ Violations of business logic or constraints
+
+🔁 Final Note: You must generate the test cases in the above format without skipping any structural requirement. Do not improvise or restructure the layout. This is a formal QA artifact and format consistency is non-negotiable.
+
+📝 API Detail input to generate test cases:
+"""
+
+instruction_old = """"
 As a Quality Engineer, generate a detailed and structured set of test cases — including positive, negative, and edge cases — for validating a REST API endpoint. The goal is to ensure correctness, robustness, error handling, and resilience against edge conditions.
 
 Actor: Quality Engineer (QE)
@@ -99,13 +148,24 @@ Expected Output (from Assistant):
 * Duplicate/replay handling
 * Business logic constraints
 
+Pls be sure to generate test cases in the format mentioned above and always stick to the defined format.
+
 📝 API Detail input to generate test cases:
 
 """
 
+pos_instruction = """Positive Test Cases
+(Valid scenarios that must succeed)"""
+
+neg_instruction = """Negative Test Cases
+(Invalid/missing inputs that must fail predictably)"""
+
+edge_instruction = """Edge Test Cases
+(Boundary values, rare conditions, or stress tests)"""
+
 def process_response(response_str):
-    start_index = response_str.find("Test Case Summary:")
-    end_index = response_str.find("QE Test Strategy Coverage Checklist:")
+    start_index = response_str.find("Test Case Summary Section")
+    end_index = response_str.find("QE Test Strategy Coverage Checklist")
     processed_response = response_str[start_index:end_index]
     return processed_response
 
@@ -118,15 +178,43 @@ def split_processed_response(proc_response_str):
     pos_test_cases_content = proc_response_str[pos_test_case_start_index:(neg_test_case_start_index-5)]
     neg_test_cases_content = proc_response_str[neg_test_case_start_index:(edge_test_case_start_index-5)]
     edge_test_cases_content = proc_response_str[edge_test_case_start_index:]
-    pos_test_cases = re.split(r'\s\d+\.\s', pos_test_cases_content.strip())
-    neg_test_cases = re.split(r'\s\d+\.\s', neg_test_cases_content.strip())
-    edge_test_cases = re.split(r'\s\d+\.\s', edge_test_cases_content.strip())
+    print("printing test case content")
+    print(pos_test_cases_content)
+    print(neg_test_cases_content)
+
+    pos_test_cases_content_x = re.sub(r'^Positive Test Cases\s*', '', pos_test_cases_content)
+    # Split on **Test Case ID but keep it in the result
+    pos_test_cases_0 = re.split(r'(?=Test Case ID:)', pos_test_cases_content_x.strip())
+    # Strip each chunk and drop empty ones
+    pos_test_cases = [case.strip() for case in pos_test_cases_0 if case.strip()][1:]
+    pos_test_cases = [s.replace("**", "") for s in pos_test_cases]
+    print("printing splitted test cases")
+    print(pos_test_cases)
+    print(len(pos_test_cases))
+
+    neg_test_cases_content_x = re.sub(r'^Negative Test Cases\s*', '', neg_test_cases_content)
+    # Split on **Test Case ID but keep it in the result
+    neg_test_cases_0 = re.split(r'(?=Test Case ID:)', neg_test_cases_content_x.strip())
+    # Strip each chunk and drop empty ones
+    neg_test_cases = [case.strip() for case in neg_test_cases_0 if case.strip()][1:]
+    neg_test_cases = [s.replace("**", "") for s in neg_test_cases]
+
+    edge_test_cases_content_x = re.sub(r'^Edge Test Cases\s*', '', edge_test_cases_content)
+    # Split on **Test Case ID but keep it in the result
+    edge_test_cases_0 = re.split(r'(?=Test Case ID:)', edge_test_cases_content_x.strip())
+    # Strip each chunk and drop empty ones
+    edge_test_cases = [case.strip() for case in edge_test_cases_0 if case.strip()][1:]
+    edge_test_cases = [s.replace("**", "") for s in edge_test_cases]
+
+    #pos_test_cases = re.split(r'\s\d+\.\s', pos_test_cases_content.strip())
+    #neg_test_cases = re.split(r'\s\d+\.\s', neg_test_cases_content.strip())
+    #edge_test_cases = re.split(r'\s\d+\.\s', edge_test_cases_content.strip())
     return test_summary_content, pos_test_cases, neg_test_cases, edge_test_cases
 
 
 def gen_rest_assured_script(api_name, api_desc, test_case_content):
     # Wrap it with LangChain
-    llm_hf_rest_assured = HuggingFaceEndpoint(endpoint_url=hf_endpoint_url_resassured,max_new_tokens=3000,streaming=True)
+    llm_hf_rest_assured = HuggingFaceEndpoint(endpoint_url=hf_endpoint_url_resassured,max_new_tokens=6000,streaming=True)
     
     # Create a simple prompt template
     prompt_template = PromptTemplate(
@@ -192,17 +280,17 @@ with st.expander("Total API test coverage, woven in a snap."):
 #st.subheader("Total API test coverage, woven in a snap.", anchor=False)
     st.write(
     """
-    ***TestWeaver transforms your API specs into comprehensive test cases and Python test scripts***, covering both positive and negative scenarios. It ensures complete API test coverage — from happy paths to edge cases, and error handling.
+    ***TestWeaver transforms your API specs into comprehensive test cases and RestAssured test scripts***, covering both positive and negative scenarios. It ensures complete API test coverage — from happy paths to edge cases, and error handling.
 
     🔥 Key Features:
 
-    🛠️ Automated Test Generation: Instantly generate Python test scripts from your API specifications.
+    🛠️ Automated Test Generation: Instantly generate RestAssured test scripts from your API specifications.
 
     ✅ Positive & Negative Scenarios: Full-spectrum testing, covering success and failure paths.
 
     🔍 Comprehensive Coverage: Validates every edge case, error, and boundary condition.
 
-    ⚙️ Easy Integration: Plug directly into your testing pipeline with ready-to-run Python scripts.
+    ⚙️ Easy Integration: Plug directly into your testing pipeline with ready-to-run RestAssured scripts.
 
     💥 Benefits:
 
@@ -422,20 +510,12 @@ Test Case Summary:
 """
 
 
-
-response = ""
-processed_response = dummy_response
-restassured_automation_scripts = []
-api_name = ""
-api_desc = ""
-pos_test_cases_len = 0
-neg_test_cases_len = 0
-edge_test_cases_len = 0
-total_test_cases_len = 0
-
 # Initialize session variable if it doesn't exist
 if 'download_test_cases' not in st.session_state:
     st.session_state.download_test_cases = False
+
+if 'processed_response' not in st.session_state:
+    st.session_state.processed_response = ""
 
 if 'generate_test_cases' not in st.session_state:
     st.session_state.generate_test_cases = False
@@ -446,6 +526,16 @@ if 'show_generated_test_cases' not in st.session_state:
 if 'show_generate_script' not in st.session_state:
     st.session_state.show_generate_script = False
 
+
+processed_response = st.session_state.processed_response
+response = ""
+restassured_automation_scripts = []
+api_name = ""
+api_desc = ""
+pos_test_cases_len = 0
+neg_test_cases_len = 0
+edge_test_cases_len = 0
+total_test_cases_len = 0
 
 
 with st.form("my_form"):
@@ -486,21 +576,22 @@ if(st.session_state.generate_test_cases == True):
     st.session_state.show_generate_script = True
     st.session_state.show_generated_test_cases = True
     processed_response = process_response(response)
-    st.session_state.generate_test_cases = False
+    st.session_state.processed_response = processed_response
 
 
 @st.dialog("Generate RestAssured Scripts", width="large")
 def generate_rest_assured_scripts():
     print("setting rest assured state")
     test_summary_content, pos_test_cases, neg_test_cases, edge_test_cases = split_processed_response(processed_response)
-    pos_test_cases_len, neg_test_cases_len, edge_test_cases_len = len(pos_test_cases)-1, len(neg_test_cases)-1, len(edge_test_cases)-1
+    print(pos_test_cases)
+    pos_test_cases_len, neg_test_cases_len, edge_test_cases_len = len(pos_test_cases), len(neg_test_cases), len(edge_test_cases)
     total_test_cases_len = pos_test_cases_len + neg_test_cases_len + edge_test_cases_len
     pos_test_indices = [f"Positive-{i}" for i in range(1, pos_test_cases_len+1)]
     neg_test_indices = [f"Negative-{i}" for i in range(1, neg_test_cases_len+1)]
     edge_test_indices = [f"Edge-{i}" for i in range(1, edge_test_cases_len+1)]
     test_indices = pos_test_indices + neg_test_indices + edge_test_indices
     test_indices = list(dict.fromkeys(test_indices))
-    test_case_contents = pos_test_cases [1:] + neg_test_cases [1:] + edge_test_cases[1:]
+    test_case_contents = pos_test_cases + neg_test_cases + edge_test_cases
     test_case_option = st.selectbox(
     "Test Case ID",
     test_indices)
@@ -541,3 +632,4 @@ with bt_cols[1]:
 if(st.session_state.show_generated_test_cases == True):
     st.success("Generated Test Cases are:")        
     st.write(processed_response)
+    st.session_state.generate_test_cases = False

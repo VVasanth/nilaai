@@ -165,6 +165,20 @@ StoryWise: From fuzzy ideas to rock-solid user stories — in real time.
     """
 )
 
+# Initialize session variable if it doesn't exist
+if 'download_test_cases' in st.session_state:
+    st.session_state.download_test_cases = False
+
+if 'generate_test_cases' in st.session_state:
+    st.session_state.generate_test_cases = False
+
+if 'show_generated_test_cases' in st.session_state:
+    st.session_state.show_generated_test_cases = False
+
+if 'show_generate_script' in st.session_state:
+    st.session_state.show_generate_script = False
+
+
 st.divider()
 
 st.subheader("🧠 Experiment Zone: Validate Your User Stories with AI")  # This acts as the form title

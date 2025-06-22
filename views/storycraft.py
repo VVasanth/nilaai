@@ -88,7 +88,21 @@ If the user story input does not meet the defined template, pls respond back ask
 User Story to be evaluated:
 
 """
+# reset the session state variables associated with testweaver page
+if 'download_test_cases' in st.session_state:
+    st.session_state.download_test_cases = False
 
+if 'generate_test_cases' in st.session_state:
+    st.session_state.generate_test_cases = False
+
+if 'processed_response' in st.session_state:
+    st.session_state.processed_response = ""
+
+if 'show_generated_test_cases' in st.session_state:
+    st.session_state.show_generated_test_cases = False
+
+if 'show_generate_script' in st.session_state:
+    st.session_state.show_generate_script = False
 
 def generate_response(input_1, input_2, input_3):
     """
