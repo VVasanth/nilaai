@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-HUGGINGFACEHUB_API_TOKEN = "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"
+HUGGINGFACEHUB_API_TOKEN = "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"
 hf_endpoint_url = "https://dl5gegyfgn6puaab.us-east-1.aws.endpoints.huggingface.cloud"
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
 
@@ -171,6 +171,9 @@ if 'download_test_cases' in st.session_state:
 
 if 'generate_test_cases' in st.session_state:
     st.session_state.generate_test_cases = False
+
+if 'processed_response' in st.session_state:
+    st.session_state.processed_response = ""
 
 if 'show_generated_test_cases' in st.session_state:
     st.session_state.show_generated_test_cases = False

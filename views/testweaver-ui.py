@@ -10,7 +10,7 @@ import re
 import json
 
 load_dotenv()
-HUGGINGFACEHUB_API_TOKEN = "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"
+HUGGINGFACEHUB_API_TOKEN = "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"
 hf_endpoint_url_qwencode = "https://pawadchurisr44it.us-east-2.aws.endpoints.huggingface.cloud"
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
 
