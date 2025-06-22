@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-HUGGINGFACEHUB_API_TOKEN = "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"
 hf_endpoint_url = "https://dl5gegyfgn6puaab.us-east-1.aws.endpoints.huggingface.cloud"
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
+#os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
+
 
 # Define prompt
 template = """### Instruction:
