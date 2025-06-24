@@ -10,6 +10,7 @@ import re
 import json
 
 load_dotenv()
+#HUGGINGFACEHUB_API_TOKEN = "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"
 hf_endpoint_url_qwencode = "https://pawadchurisr44it.us-east-2.aws.endpoints.huggingface.cloud"
 #os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
 
@@ -26,10 +27,47 @@ As a Selenium Test Automation architect, generate a functioning, well formatted,
 
 """
 
-selenium_instruction_pom = """
+selenium_instruction_testng = """
+As a Test Automation Engineer, generate a robust Selenium TestNG automation script in Java, based on the test steps provided below in json format.
+Your response must strictly follow the guidelines below:
+    ✅ Use the value present under XPath column for the identifiers
+    ✅ Add inline comments explaining each key part of the code
+    ✅ Implement validations using Assert.* statements for expected UI behavior
+    ✅ Use explicit waits (WebDriverWait) instead of hardcoded sleep
+    ✅ Follow TestNG annotations like @BeforeMethod, @AfterMethod, @Test
+    ✅ Ensure code quality: proper naming, structure, and exception handling
+    ✅ Assume XPath locators are provided unless specified otherwise
+    ✅ Add negative scenario handling if any step might fail
+
+⚠️ IMPORTANT:
+    The response must be pure, production-ready Java code that can be directly used.
+    Do not include any introductory text, explanation, or markdown formatting.
+"""
+
+
+selenium_instruction_pom_old = """
 As a Selenium Test Automation architect, generate a functioning, well formatted, Page Object Model script with validation steps based on the below test steps captured in the json format...pls use the value present under XPath column for the identifiers in the test automation script:
 
 """
+
+selenium_instruction_pom = """
+As a Test Automation Engineer, generate a robust Selenium Page Object Model automation script in Java, based on the test steps provided below in json format.
+Your response must strictly follow the guidelines below:
+    ✅ Use Page Object Model (POM) structure
+    ✅ Use the value present under XPath column for the identifiers
+    ✅ Add inline comments explaining each key part of the code
+    ✅ Implement validations using Assert.* statements for expected UI behavior
+    ✅ Use explicit waits (WebDriverWait) instead of hardcoded sleep
+    ✅ Follow TestNG annotations like @BeforeMethod, @AfterMethod, @Test
+    ✅ Ensure code quality: proper naming, structure, and exception handling
+    ✅ Assume XPath locators are provided unless specified otherwise
+    ✅ Add negative scenario handling if any step might fail
+
+⚠️ IMPORTANT:
+    The response must be pure, production-ready Java code that can be directly used.
+    Do not include any introductory text, explanation, or markdown formatting.
+"""
+
 
 # reset the session state variables associated with testweaver page
 if 'download_test_cases' in st.session_state:
@@ -135,5 +173,7 @@ submitted = st.button("Generate Test Scripts")
 if submitted:
     with st.spinner("Generating..."):
         gen_selenium_script = gen_selenium_script(payload, sel_test_mode)
-        proc_response = process_response(gen_selenium_script)
-        st.write(proc_response)
+        print("response...")
+        #print(gen_selenium_script)
+        #proc_response = process_response(gen_selenium_script)
+        st.write(gen_selenium_script)

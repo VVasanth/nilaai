@@ -9,6 +9,7 @@ import os
 import re
 
 load_dotenv()
+#HUGGINGFACEHUB_API_TOKEN = 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
 #hf_endpoint_url = "https://dl5gegyfgn6puaab.us-east-1.aws.endpoints.huggingface.cloud"
 hf_endpoint_url = "https://ydx9vu47ixt3vcs8.us-east-1.aws.endpoints.huggingface.cloud"
 hf_endpoint_url_resassured = "https://pawadchurisr44it.us-east-2.aws.endpoints.huggingface.cloud"
