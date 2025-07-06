@@ -11,7 +11,6 @@ import json
 
 load_dotenv()
 hf_endpoint_url_qwencode = "https://pawadchurisr44it.us-east-2.aws.endpoints.huggingface.cloud"
-#os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
 
 
 # Define prompt
@@ -41,6 +40,25 @@ Your response must strictly follow the guidelines below:
 ⚠️ IMPORTANT:
     The response must be pure, production-ready Java code that can be directly used.
     Do not include any introductory text, explanation, or markdown formatting.
+"""
+
+
+cypress_instruction_testng = """
+As a Test Automation Engineer, generate a robust Cypress automation script in JavaScript (ES6), based on the test steps provided below in JSON format.
+Your response must strictly follow the guidelines below:
+
+✅ Use the value present under the XPath column for element identification (wrap with cy.xpath() — assume the xpath plugin is installed)
+✅ Add inline comments explaining each key part of the code
+✅ Implement assertions using should() or expect() for expected UI behaviour
+✅ Rely on Cypress’s built‑in retry mechanism and command chaining instead of hard‑coded waits; when network sync is needed, alias the call with cy.intercept() and cy.wait('@alias')
+✅ Structure the test with Mocha hooks: beforeEach, afterEach, and it blocks
+✅ Ensure code quality: clear naming, modular commands (use cypress/support/commands.js if helper actions are needed), and proper error handling with cy.on('uncaught:exception', …)
+✅ Assume XPath locators are provided unless specified otherwise
+✅ Include negative‑path checks for any step that might fail (e.g., asserting an error message or element absence)
+
+⚠️ IMPORTANT:
+The response must be pure, production‑ready Cypress JavaScript code that can be used directly.
+Do not include any introductory text, explanation, or markdown formatting.
 """
 
 
@@ -104,17 +122,17 @@ def gen_selenium_script(test_case_content, test_mode):
     # Create a chain
     chain = LLMChain(llm=llm_hf_selenium, prompt=prompt_template)
 
-    if(test_mode == "***TestNG***"):
-        base_sel_instruction = selenium_instruction_testng
+    if(test_mode == "***Selenium***"):
+        base_script_instruction = selenium_instruction_testng #selenium_instruction_testng
     else:
-       base_sel_instruction = selenium_instruction_pom
+       base_script_instruction = cypress_instruction_testng
 
-    selenium_instruction = base_sel_instruction + json.dumps(test_case_content, indent=2)
+    script_instruction = base_script_instruction + json.dumps(test_case_content, indent=2)
     
 
     response = chain.run(
         {
-            "instruction": selenium_instruction
+            "instruction": script_instruction
         })
     
     return response    
@@ -122,7 +140,7 @@ def gen_selenium_script(test_case_content, test_mode):
 
 st.title(f"TestWeaver - Generate test cases and scripts", anchor=False)
 
-with st.expander("Generate selenium automation scripts in a snap."):
+with st.expander("Generate Selenium and Cypress automation scripts in a snap."):
 #st.subheader("Total API test coverage, woven in a snap.", anchor=False)
     st.write(
     """
@@ -131,8 +149,6 @@ with st.expander("Generate selenium automation scripts in a snap."):
     🔥 Key Features:
 
     🧠 Natural Language to Automation: Generate Selenium test scripts directly from plain English test steps.
-
-    🔄 Page Object Model Support: Clean, maintainable code following industry-standard best practices.
 
     ✅ End-to-End Coverage: From happy paths to failure flows — every click, input, and assertion is automated.
 
@@ -159,7 +175,7 @@ st.subheader("🧠 Test Automation Script Generation from test steps")  # This a
 #with st.form("my_form"):
 # Upload a file
 uploaded_file = st.file_uploader("Choose a file", type=['csv'])
-sel_test_mode = st.radio("Select Selenium Test Script Mode", ["***TestNG***", "***Page Object Model***"])
+sel_test_mode = st.radio("Select Automation Test Script Framework", ["***Selenium***", "***Cypress***"])
 # If a file is uploaded
 if uploaded_file is not None:
     df=pd.read_csv(uploaded_file)
