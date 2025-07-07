@@ -207,6 +207,8 @@ with st.form("my_form"):
         if not user_story_title or not user_story_desc or not acceptance_criteria:
             st.error("Title, Description and Acceptance Criteria are required. Please fill in all fields.")
         else:
+            print("inside else loop")
+            print(os.getenv("HUGGINGFACEHUB_API_TOKEN"))
             print(user_story_desc)
             with st.spinner("Evaluating..."):
                 response = generate_response(user_story_title, user_story_desc, acceptance_criteria)
