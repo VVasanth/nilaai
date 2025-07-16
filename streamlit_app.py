@@ -37,6 +37,10 @@ project_4_page = st.Page("views/testweaver-ui.py",
                 title= "TestWeaver UI - Generate test automation scripts from test steps",
                 icon=":material/fax:")
 
+project_5_page = st.Page("views/testweaver-ui-bulk.py",
+                title= "TestWeaver UI (Bulk) - Generate test automation suite",
+                icon=":material/fax:")
+
 
 project_n_page = st.Page(
     "views/chatbot.py",
@@ -51,7 +55,7 @@ def main_app():
     pg = st.navigation(
         {
             "Info": [about_page],
-            "Projects": [project_1_page, project_2_page, project_3_page, project_4_page],
+            "Projects": [project_1_page, project_2_page, project_3_page, project_4_page, project_5_page],
         }
     )
 
