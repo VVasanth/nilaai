@@ -123,7 +123,7 @@ def gen_selenium_script(test_case_content, test_mode):
     chain = LLMChain(llm=llm_hf_selenium, prompt=prompt_template)
 
     if(test_mode == "***Selenium***"):
-        base_script_instruction = selenium_instruction_testng #selenium_instruction_testng
+        base_script_instruction =  selenium_instruction_testng #selenium_instruction_testng
     else:
        base_script_instruction = cypress_instruction_testng
 

@@ -27,44 +27,30 @@ As a Selenium Test Automation architect, generate a functioning, well formatted,
 selenium_instruction_pom_new = """
 
 You are a Test Automation Engineer.
-Generate a Selenium-based Python test automation suite using the Page Object Model (POM) pattern.
-Test cases are defined by a JSON array of JSON Array - where the inner JSON Array constitute the individual manual test case. You need to refer the manual test case to generate the automation scripts, following OOPS principles.
+Generate a Selenium-based Java test automation suite using the Page Object Model (POM) pattern for the below test cases captured in json array format.
+Each json object in the array represent individual test case and you need to generate test method for each of the test cases.
 Use "Step_No" field of the individual test case to identify the sequence number, "Step" field to identify the step, "Data" field to identify the data used and "XPath" to use as a locator.
 
-Each test case must be implemented as a standalone test method, and all test cases should be organized into a test class using Python’s unittest framework.
+Each page needs to be created as a separate Page object class, with the various actions performed on the respective pages across test cases created as a methods.
+Each test case must be implemented as a standalone test method leveraging the methods defined in the Page object classes and all test cases should be organized into a test class using Java TestNG framework.
 Use webdriver.Chrome() for browser automation and ensure test setup and teardown are handled using a BaseTest class.
 Create reusable page object classes under a pages/ folder.
 
-🧾 Input JSON Format:
-[
-  [
-      {"Step_No": 1, "Step": "Open website", "Data": "https://github.com/", "XPath": NaN},
-      {"Step_No": 2, "Step": "Click on \"Enterprises\", "Data": NaN, "XPath": "//a[normalize-space()='Enterprises']"},
-      {"Step_No": 3, "Step": "Scroll down", "Data": NaN, "XPath": NaN},
-  ],
-  [
-      {"Step_No": 1, "Step": "Open website", "Data": "https://github.com/", "XPath": NaN},
-      {"Step_No": 2, "Step": "Click on \"Enterprises\", "Data": NaN, "XPath": "//a[normalize-space()='Enterprises']"},
-      {"Step_No": 3, "Step": "Scroll down", "Data": NaN, "XPath": NaN},
-    ]
-]
 
 🛠️ Output Requirements:
 Use Page Object Model (separate LoginPage in pages/login_page.py)
 
 Create BaseTest class to handle browser setup/teardown (setUp/tearDown)
 
-Dynamically generate test methods in tests/test_login.py based on test names and steps
-
-Use unittest.TestCase for structure
-
 Use selenium.webdriver.common.by.By for locators
+
+Have separate test method for each test case
 
 Handle unsupported actions with meaningful comments or exceptions
 
 🔄 Each step type should be implemented with reusable helper methods where appropriate (e.g., enter_text(), click_element(), assert_in_url(), etc.).
 
-✅ Ensure all generated code is Pythonic, readable, modular, and ready to run.
+✅ Ensure all generated code is OOPS structured, readable, modular, and ready to run.
 
 """
 
