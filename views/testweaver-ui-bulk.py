@@ -44,6 +44,8 @@ Create BaseTest class to handle browser setup/teardown (setUp/tearDown)
 
 Use selenium.webdriver.common.by.By for locators
 
+Use new WebDriverWait(driver, Duration.ofSeconds(10)); for wait statements.
+
 Have separate test method for each test case
 
 Handle unsupported actions with meaningful comments or exceptions
