@@ -100,7 +100,7 @@ def process_response(response_str):
 
 def gen_selenium_suite(test_suite_content):
     # Wrap it with LangChain
-    llm_hf_selenium = HuggingFaceEndpoint(endpoint_url=hf_endpoint_url_qwencode,max_new_tokens=3000,streaming=True)
+    llm_hf_selenium = HuggingFaceEndpoint(endpoint_url=hf_endpoint_url_qwencode,max_new_tokens=4800,streaming=True)
     
     # Create a simple prompt template
     prompt_template = PromptTemplate(
